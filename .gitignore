@@ -1,0 +1,11 @@
+**/.vs
+/InHues.API/InHues.API.csproj.user
+/InHues.API/bin/*
+/InHues.API/obj/*
+/InHues.API/Properties/PublishProfiles/*
+/InHues.Application/bin/*
+/InHues.Application/obj/*
+/InHues.Domain/bin/*
+/InHues.Domain/obj/*
+/InHues.Infrastructure/bin/*
+/InHues.Infrastructure/obj/*
