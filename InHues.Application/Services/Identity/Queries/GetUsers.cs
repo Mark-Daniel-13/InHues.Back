@@ -23,7 +23,7 @@ namespace InHues.Application.Services.Identity.Queries
         public Task<IQueryable<UserResponseDto>> Handle(GetUsers request, CancellationToken cancellationToken)
         {
             return Task.Run(() => { 
-                var userList = _identityService.GetUsers();
+                var userList = _identityService.GetUsers().Where(x=> x.UserName != "admin");
                 if (userList is null || !userList.Any()) return null;
 
                 return userList;

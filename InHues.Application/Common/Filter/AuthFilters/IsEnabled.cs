@@ -22,7 +22,7 @@ namespace InHues.Application.Common.Filter.AuthFilters
             // Endpoint allows anonymous access, skip authorization logic
             if (context.ActionDescriptor.EndpointMetadata.Any(x => x.GetType() == typeof(AllowAnonymousAttribute))) return;
 
-            if (!Convert.ToBoolean(context.HttpContext.User.FindFirst("isEnabled").Value)) {
+            if (context.HttpContext.User.FindFirst("isEnabled") != null && !Convert.ToBoolean(context.HttpContext.User.FindFirst("isEnabled").Value)) {
                 _logger.LogWarning("User is not enabled");
                 context.Result = new ForbidResult();
             }

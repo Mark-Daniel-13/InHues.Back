@@ -20,7 +20,6 @@ using System.Text.Json.Serialization;
 namespace InHues.API.Controllers.V1
 {
     [Produces("application/json")]
-    [AllowAnonymous]
     public class IdentityController: ControllerBase
     {
         private ISender _mediator;
@@ -85,7 +84,6 @@ namespace InHues.API.Controllers.V1
             var response = await Mediator.Send(new ValidateUserName() { UserName = payload .Username});
             return Ok(response);
         }
-
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Administrator")]
         [HttpGet(ApiRoutes.Identity.FetchRoles)]
         public async Task<IActionResult> FetchRoles()
@@ -119,11 +117,11 @@ namespace InHues.API.Controllers.V1
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Administrator")]
         [HttpGet(ApiRoutes.Identity.GetUsers)]
-        public async Task<ActionResult> GetUsers([FromBody] GetUsers payload)
+        public async Task<ActionResult> GetUsers()
         {
             try
             {
-                var response = await Mediator.Send(payload);
+                var response = await Mediator.Send(new GetUsers());
                 return Ok(response);
             }
             catch (Exception e)

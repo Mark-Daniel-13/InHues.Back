@@ -9,6 +9,8 @@ namespace InHues.Infrastructure
         public static IEdmModel GetEntityDataModelV1()
         {
             var builder = new ODataConventionModelBuilder();
+            //builder.EntitySet<TenantResponse>("Tenants");
+            //builder.EntitySet<UserProfileResponseDto>("Users");
             builder.EnableLowerCamelCase();
             return builder.GetEdmModel();
         }

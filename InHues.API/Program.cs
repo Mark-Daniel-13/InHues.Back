@@ -54,7 +54,7 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
         policy =>
         {
-            policy.WithOrigins("https://localhost:44360", "https://staging.dermtrics.com", "http://staging.dermtrics.com")
+            policy.WithOrigins("https://localhost:44360", "https://staging.inhues.com", "http://staging.inhues.com")
             .AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod();

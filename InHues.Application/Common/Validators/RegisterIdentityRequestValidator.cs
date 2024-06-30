@@ -7,9 +7,8 @@ namespace InHues.Application.Common.Validators
     {
         public RegisterIdentityRequestValidator()
         {
-            RuleFor(x => x.Email)
-                .EmailAddress().WithMessage("Email is invalid")
-                .NotEmpty().WithMessage("Email is required");
+            RuleFor(x => x.UserName)
+                .NotEmpty().WithMessage("Username is required");
 
             RuleFor(x => x.Password)
                 .NotEmpty().WithMessage("Password is required");

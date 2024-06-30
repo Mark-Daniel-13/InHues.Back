@@ -72,18 +72,9 @@ namespace InHues.Infrastructure.Identity
                     return (Result.Failure(errors), null);
                 }
 
-                if (!string.IsNullOrEmpty(identity.Email))
-                {
-                    var isExisting = await _userManager.FindByEmailAsync(identity.Email);
-                    if (isExisting != null)
-                    {
-                        IEnumerable<string> errors = new List<string>() { "Email already exist!" };
-                        return (Result.Failure(errors), null);
-                    }
-                }
-
                 var user = identity.Adapt<ApplicationUser>();
                 user.InitialPassword = identity.Password;
+                user.Email = string.Empty;
                 var userRequest = await _userManager.CreateAsync(user, identity.Password);
                 if (!userRequest.Succeeded) return (Result.Failure(userRequest.Errors.Select(x => x.Description)), null);
 
@@ -191,21 +182,26 @@ namespace InHues.Infrastructure.Identity
         }
         public async Task<(Result, AuthSuccessResponse)> LoginUserAsync(LoginIdentityRequest login)
         {
-            var isExisting = await _userManager.FindByEmailAsync(login.Email);
-            if (isExisting is null)
+            ApplicationUser user = null;
+            user = await _userManager.FindByEmailAsync(login.Email);
+            if (user is null)
             {
-                IEnumerable<string> errors = new List<string>() { "Email not found!" };
-                return (Result.Failure(errors),null);
+                user = await _userManager.FindByNameAsync(login.Email);
+                if (user is null)
+                {
+                    IEnumerable<string> errors = new List<string>() { "Email / Username not found!" };
+                    return (Result.Failure(errors), null);
+                }
             }
 
-            var validateUserPassword = await _userManager.CheckPasswordAsync(isExisting, login.Password);
+            var validateUserPassword = await _userManager.CheckPasswordAsync(user, login.Password);
             if (!validateUserPassword)
             {
                 IEnumerable<string> errors = new List<string>() { "Email or password is incorrect!" };
                 return (Result.Failure(errors), null);
             }
 
-            return (Result.Success(), await GetTokenAsync(isExisting));
+            return (Result.Success(), await GetTokenAsync(user));
         }
         public async Task<(Result, AuthSuccessResponse)> RefreshTokenAsync(RefreshTokenRequest request)
         {
